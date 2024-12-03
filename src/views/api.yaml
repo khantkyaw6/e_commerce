@@ -1,0 +1,176 @@
+openapi: 3.0.3
+servers:
+  - url: http://localhost:7000/api/v1/admin
+info:
+  title: E-Commerce Admin
+  description:  This is an E-commerce website API based on the OpenAPI 3.0 specification.
+  version: 1.0.0
+  contact:
+    email: yangonyinxiangyule@gmail.com
+  x-logo:
+    url: 'https://cdn.worldvectorlogo.com/logos/express-109.svg'
+tags:
+  - name: Auth
+    description: Operations about Authentication
+  - name: Routes
+    description: Operations about Routes
+  - name: Permissions
+    description: Operations about Permissions
+  - name: Roles
+    description: Operations about Roles
+  - name: Admin
+    description: Operations about Admin
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login into the Admin Dashboard
+      description: Logs admin into the system
+      requestBody:
+        description: Login Route for Admin into the system
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "specialaccount@gmail.com"
+                password:
+                  type: string
+                  format: password
+                  example: "ygnYinxiang2023"
+      responses:
+        '200':
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    type: boolean
+                    description: Indicates whether the login was successful.
+                  message:
+                    type: string
+                    description: A message indicating the result of the login.
+                    example: Login successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: Special Account
+                      email:
+                        type: string
+                        format: email
+                        example: specialaccount@gmail.com
+                      phone:
+                        type: string
+                        example: 09123456789
+                      token:
+                        type: string
+                        description: An authentication token for the user.
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk5MjU3MDI0.LCJleHAiOjE2OTkzNDM0MjR9
+                      roles:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            name:
+                              type: string
+                              example: SuperAdmin
+                      permissions:
+                        type: array
+                        description: A list of permissions.
+                        items:
+                          type: string
+                        example:
+                          - create-brands
+                          - view-brands
+                      routes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            label:
+                              type: string
+                              example: Dashboard
+                            key:
+                              type: string
+                              example: dashboard
+                            icon:
+                              type: string
+                              example: fa-solid fa-house
+                            path:
+                              type: string
+                              example: /dashboard
+                            parent_id:
+                              type: integer
+                              example: null
+                            children:
+                              type: array
+                              example: null                           
+        '404':
+          description: Admin Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Admin Not Found.
+        '401':
+          description: Incorrect Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isSuccess:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Incorrect Password.
+
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: boolean
+                example: false
+              msg:
+                type: string
+                example: Token not present!
+
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []
+  

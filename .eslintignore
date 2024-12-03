@@ -1,0 +1,20 @@
+# Ignore a specific file
+config.js
+
+# Ignore all JavaScript files in a directory
+build/*.js
+
+# Ignore all files in a directory
+dist/
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore all .md (Markdown) files
+**/*.md
+
+tests
+coverage
+jest-html-reporters-attach
+jest_html_reporters.html
+
